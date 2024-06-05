@@ -84,6 +84,8 @@ const apy = async () => {
         }),
       ]);
 
+    console.log('priceUsd', priceUsd);
+
     const interestRates = await call({
       abi: irmAbi.get_interest_rates,
       target: `0x${reserveData.interest_rate_model.toString(16)}`,
@@ -97,7 +99,7 @@ const apy = async () => {
       .div(SCALE)
       .div(SCALE);
     const borrowApr = BigNumber(interestRates.borrowing_rate.toString()).div(
-      SCALE,
+      SCALE
     );
 
     // In percent
@@ -105,11 +107,11 @@ const apy = async () => {
     const borrowApy = (Math.pow(e, borrowApr.toNumber()) - 1) * 100;
 
     const totalDebt = BigNumber(totalDebtBn.toString()).div(
-      BigNumber(`1e${decimals}`),
+      BigNumber(`1e${decimals}`)
     );
     const totalDebtUsd = totalDebt.times(priceUsd);
     const marketTokenBalance = BigNumber(marketTokenBalanceBn.toString()).div(
-      BigNumber(`1e${decimals}`),
+      BigNumber(`1e${decimals}`)
     );
     const marketTokenBalanceUsd = marketTokenBalance.times(priceUsd);
 
@@ -132,6 +134,8 @@ const apy = async () => {
 
   return Promise.all(promises);
 };
+
+apy();
 
 module.exports = {
   apy,
